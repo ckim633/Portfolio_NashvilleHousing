@@ -150,6 +150,24 @@ FROM RowNumCTE
 WHERE row_num > 1
 --ORDER BY PropertyAddress
 
+WITH RowNumCTE AS(
+SELECT *,
+  ROW_NUMBER() OVER (
+  PARTITION BY ParcelID,
+               PropertyAddress,
+			   SalePrice,
+			   SaleDate,
+			   LegalReference
+			   ORDER BY
+			     UniqueID
+				 ) row_num
+FROM Portfolio.dbo.NashvilleHousing
+--ORDER BY ParcelID
+)
+DELETE
+FROM RowNumCTE
+WHERE row_num > 1
+
 
 
 --DELETE Unused Columns
